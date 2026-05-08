@@ -27,6 +27,16 @@ set(
 add_executable(LevelEditor
   src/main.cpp
  )
+ 
+ target_compile_definitions(
+	LevelEditor PUBLIC
+	WITH_EDITOR
+	CHECK_ERRORS
+ )
+ 
+ target_include_directories(
+    LevelEditor PUBLIC ${PROJECT_SOURCE_DIR}/src
+)
 
 if(APPLE)
   set_target_properties(LevelEditor PROPERTIES
@@ -56,4 +66,21 @@ target_link_libraries(LevelEditor
   SDL3::SDL3 
   SDL3_image::SDL3_image 
   SDL3_ttf::SDL3_ttf 
+)
+
+set(AssetDirectory "${PROJECT_SOURCE_DIR}/Assets")
+add_custom_command(
+  TARGET LevelEditor POST_BUILD
+  COMMAND
+  ${CMAKE_COMMAND} -E copy_if_different
+    "$<TARGET_FILE:SDL3::SDL3>"
+    "$<TARGET_FILE:SDL3_image::SDL3_image>"
+    "$<TARGET_FILE:SDL3_ttf::SDL3_ttf>"
+    "$<TARGET_FILE_DIR:LevelEditor>"
+
+  COMMAND
+  ${CMAKE_COMMAND} -E copy_directory_if_different
+    "${AssetDirectory}"
+    "$<TARGET_FILE_DIR:LevelEditor>/Assets"
+  VERBATIM
 )
