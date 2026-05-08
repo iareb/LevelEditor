@@ -26,7 +26,7 @@ set(
 
 add_executable(LevelEditor
   src/main.cpp
- "src/Window.h" "src/Rectangle.h" "src/UI.h" "src/Button.h" "src/UserEvents.h" "src/SettingsMenu.h" "src/Image.h" "src/Image.cpp" "src/Text.h" "src/WrappedText.h")
+ )
 
 if(APPLE)
   set_target_properties(LevelEditor PROPERTIES
