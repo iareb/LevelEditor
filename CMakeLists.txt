@@ -26,7 +26,7 @@ set(
 
 add_executable(LevelEditor
   src/main.cpp
- )
+  "src/LevelEditor/Scene.h" "src/LevelEditor/AssetManager.h" "src/LevelEditor/Image.h" "src/LevelEditor/Text.h" "src/LevelEditor/Button.cpp")
  
  target_compile_definitions(
 	LevelEditor PUBLIC
