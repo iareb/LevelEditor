@@ -43,17 +43,21 @@ namespace Config {
  */
 namespace Config::Editor {
 
-	/// Title displayed in the editor window's title bar.
+	/**
+	 * @brief Configuration for the editor Window.
+	 */
 	inline const std::string WINDOW_TITLE{ "Editor" };
-	
-	/// Width of the editor window in pixels.
 	inline const int WINDOW_WIDTH{ 730 };
-
-	/// Height of the editor window in pixels.
 	inline const int WINDOW_HEIGHT{ 300 };
-
-	/// Background clear color of the editor window (dark grey).
 	inline const SDL_Color WINDOW_BACKGROUND{ 35, 35, 35, 255 };
+
+	/**
+	 * @brief Configuration for the Actor menu.
+	 */
+	inline const int ACTOR_MENU_WIDTH{ 70 };
+	inline const int ACTOR_MENU_POSITION_X{ WINDOW_WIDTH - ACTOR_MENU_WIDTH };
+	inline const SDL_Color ACTOR_MENU_BACKGROUND{ 15, 15, 15, 255 };
+	inline const int PADDING{ 10 };
 }
 #endif // WITH_EDITOR
 
