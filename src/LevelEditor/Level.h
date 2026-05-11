@@ -1,0 +1,34 @@
+#pragma once
+#include <SDL3/SDL.h>
+#include <memory>
+#include <vector>
+#include "Actor.h"
+#include "Config.h"
+
+namespace LevelEditor {
+class Scene;
+using ActorPtr = std::unique_ptr<Actor>;
+using ActorPtrs = std::vector<ActorPtr>;
+
+class Level {
+public:
+    Level(Scene& ParentScene)
+    : ParentScene{ParentScene} {}
+
+    void HandleEvent(const SDL_Event& E);
+    void Tick(float DeltaTime);
+    void Render(SDL_Surface* Surface);
+    bool HasMouseFocus() const;
+    void AddToLevel(ActorPtr NewActor);
+    void HandleDrop(Actor* DragActor);
+
+private:
+    Scene& ParentScene;
+    ActorPtrs Actors;
+    SDL_Rect Rect{
+        0, 0,
+        Config::Editor::LEVEL_WIDTH,
+        Config::Editor::LEVEL_HEIGHT
+    };
+};
+}

@@ -3,6 +3,7 @@
 #include "ActorMenu.h"
 #include "ActorTooltip.h"
 #include "AssetManager.h"
+#include "Level.h"
 #include "Window.h"
 
 namespace LevelEditor {
@@ -15,16 +16,23 @@ public:
 	void HandleEvent(const SDL_Event& E) {
 		ActorShelf.HandleEvent(E);
 		TooltipWindow.HandleEvent(E);
+		CurrentLevel.HandleEvent(E);
 	}
 
 	void Tick(float DeltaTime) {
 		ActorShelf.Tick(DeltaTime);
 		TooltipWindow.Tick(DeltaTime);
+		CurrentLevel.Tick(DeltaTime);
 	}
 
 	void Render(SDL_Surface* Surface) {
 		ActorShelf.Render(Surface);
 		TooltipWindow.Render();
+		CurrentLevel.Render(Surface);
+	}
+
+	Level& GetLevel() {
+		return CurrentLevel;
 	}
 
 	AssetManager& GetAssets() {
@@ -40,6 +48,7 @@ public:
 	}
 
 private:
+	Level CurrentLevel{ *this };
 	ActorMenu ActorShelf{ *this };
 	Window& ParentWindow;
 	ActorTooltip TooltipWindow{ *this };

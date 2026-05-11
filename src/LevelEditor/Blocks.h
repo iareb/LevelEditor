@@ -10,5 +10,9 @@ public:
     BlueBlock(
         Scene& ParentScene, SDL_Rect Rect
     );
+
+    std::unique_ptr<Actor> Clone() const override {
+        return std::make_unique<BlueBlock>(*this);
+    }
 };
 }

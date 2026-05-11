@@ -27,5 +27,6 @@ private:
 	SDL_Window* SDLWindow{ nullptr };
 	Actor* DragActor{ nullptr };
 	Scene& ParentScene;
+	SDL_Cursor* DenyCursor{ nullptr };
 };
 }

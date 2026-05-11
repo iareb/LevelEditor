@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <SDL3/SDL.h>
 #include "Image.h"
 
@@ -28,6 +29,19 @@ public:
 
 	const SDL_Point& GetDragOffset() const {
 		return DragOffset;
+	}
+
+	SDL_Point GetPosition() const {
+		return {Rect.x, Rect.y};
+	}
+
+	void SetPosition(int x, int y) {
+		Rect.x = x;
+		Rect.y = y;
+	}
+
+	virtual std::unique_ptr<Actor> Clone() const {
+		return std::make_unique<Actor>(*this);
 	}
 
 protected:

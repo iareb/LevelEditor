@@ -42,20 +42,26 @@ namespace Config {
  * configuration so they are stripped out in non-editor builds.
  */
 namespace Config::Editor {
+	/**
+	 * @brief Configuration for the level area.
+	 */
+	inline const int LEVEL_WIDTH{ 650 };
+	inline const int LEVEL_HEIGHT{ 150 };
+	inline constexpr SDL_Color LEVEL_BACKGROUND{ 50, 50, 50, 255 };
 
 	/**
 	 * @brief Configuration for the editor Window.
 	 */
+	inline const int ACTOR_MENU_WIDTH{ 70 };
 	inline const std::string WINDOW_TITLE{ "Editor" };
-	inline const int WINDOW_WIDTH{ 730 };
-	inline const int WINDOW_HEIGHT{ 300 };
+	inline const int WINDOW_WIDTH{ LEVEL_WIDTH + ACTOR_MENU_WIDTH };
+	inline const int WINDOW_HEIGHT{ LEVEL_HEIGHT + 50 };
 	inline const SDL_Color WINDOW_BACKGROUND{ 35, 35, 35, 255 };
 
 	/**
 	 * @brief Configuration for the Actor menu.
 	 */
-	inline const int ACTOR_MENU_WIDTH{ 70 };
-	inline const int ACTOR_MENU_POSITION_X{ WINDOW_WIDTH - ACTOR_MENU_WIDTH };
+	inline const int ACTOR_MENU_POSITION_X{ LEVEL_WIDTH };
 	inline const SDL_Color ACTOR_MENU_BACKGROUND{ 15, 15, 15, 255 };
 	inline const int PADDING{ 10 };
 }

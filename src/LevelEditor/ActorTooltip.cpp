@@ -15,12 +15,18 @@ ActorTooltip::ActorTooltip(Scene& ParentScene)
     | SDL_WINDOW_NOT_FOCUSABLE
   );
   CheckSDLError("Creating Tooltip Window");
+
+  DenyCursor = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_NOT_ALLOWED);
+  CheckSDLError("Creating DenyCursor");
 }
 
 ActorTooltip::~ActorTooltip() {
   if (!SDL_WasInit(SDL_INIT_VIDEO)) return;
   if (SDLWindow) {
     SDL_DestroyWindow(SDLWindow);
+  }
+  if (DenyCursor) {
+    SDL_DestroyCursor(DenyCursor);
   }
 }
 
@@ -37,6 +43,14 @@ void ActorTooltip::PositionWindow() {
     int(x) - DragOffsetX,
     int(y) - DragOffsetY
   );
+
+  if (ParentScene.GetLevel().HasMouseFocus()) {
+    SDL_SetWindowOpacity(SDLWindow, 1.0f);
+    SDL_SetCursor(SDL_GetDefaultCursor());
+  } else {
+    SDL_SetWindowOpacity(SDLWindow, 0.5f);
+    SDL_SetCursor(DenyCursor);
+  }
 }
 
 void ActorTooltip::SetIsVisible(bool NewVisibility) {
@@ -45,6 +59,8 @@ void ActorTooltip::SetIsVisible(bool NewVisibility) {
     SDL_ShowWindow(SDLWindow);
   } else {
     SDL_HideWindow(SDLWindow);
+    SDL_SetCursor(SDL_GetDefaultCursor());
+    SDL_SetWindowOpacity(SDLWindow, 1.0f);
   }
 }
 
@@ -67,6 +83,7 @@ void ActorTooltip::Tick(float DeltaTime) {
   auto Buttons{ SDL_GetMouseState(nullptr, nullptr) };
   if (!(Buttons & SDL_BUTTON_MASK(SDL_BUTTON_LEFT))) {
     SetIsVisible(false);
+    ParentScene.GetLevel().HandleDrop(DragActor);
   } else {
     PositionWindow();
   }

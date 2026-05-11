@@ -26,7 +26,9 @@ set(
 
 add_executable(LevelEditor
   src/main.cpp
-  "src/LevelEditor/Scene.h" "src/LevelEditor/AssetManager.h" "src/LevelEditor/Image.h" "src/LevelEditor/Text.h" "src/LevelEditor/Button.cpp" "src/LevelEditor/ActorMenu.h" "src/LevelEditor/Actor.h" "src/LevelEditor/Blocks.h" "src/LevelEditor/Blocks.cpp" "src/LevelEditor/Actor.cpp" "src/LevelEditor/ActorTooltip.h" "src/LevelEditor/ActorTooltip.cpp")
+  "src/LevelEditor/Scene.h" "src/LevelEditor/AssetManager.h" "src/LevelEditor/Image.h" "src/LevelEditor/Text.h" "src/LevelEditor/Button.cpp" "src/LevelEditor/ActorMenu.h" "src/LevelEditor/Actor.h" "src/LevelEditor/Blocks.h" "src/LevelEditor/Blocks.cpp" "src/LevelEditor/Actor.cpp" "src/LevelEditor/ActorTooltip.h" "src/LevelEditor/ActorTooltip.cpp"
+        src/LevelEditor/Level.h
+        src/LevelEditor/Level.cpp)
  
  target_compile_definitions(
 	LevelEditor PUBLIC
