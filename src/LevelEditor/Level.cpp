@@ -62,7 +62,7 @@ void Level::HandleDrop(Actor* DragActor) {
 
     float MouseX, MouseY;
     SDL_GetMouseState(&MouseX, &MouseY);
-    auto [DragOffsetX, DragOffsetY] = DragActor->GetPosition();
+    auto [DragOffsetX, DragOffsetY] = DragActor->GetDragOffset();
 
     ActorPtr NewActor = DragActor->Clone();
     NewActor->SetPosition(
