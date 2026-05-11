@@ -18,9 +18,22 @@ public:
 		Art.Render(Surface, Rect);
 	}
 
+	const SDL_Rect& GetRect() const {
+		return Rect;
+	}
+
+	const Image& GetArt() const {
+		return Art;
+	}
+
+	const SDL_Point& GetDragOffset() const {
+		return DragOffset;
+	}
+
 protected:
 	Scene& ParentScene;
 	SDL_Rect Rect;
 	Image& Art;
+	SDL_Point DragOffset{ 0, 0 };
 };
 }

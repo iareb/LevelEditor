@@ -52,6 +52,9 @@ void Actor::HandleEvent(const SDL_Event& E) {
 		E.button.button == SDL_BUTTON_LEFT &&
 		HasMouseFocus()
 		) {
+		DragOffset.x = int(E.button.x) - Rect.x;
+		DragOffset.y = int(E.button.y) - Rect.y;
+
 		SDL_Event DragEvent{ UserEvents::ACTOR_DRAG };
 		DragEvent.user.data1 = this;
 		SDL_PushEvent(&DragEvent);
