@@ -10,7 +10,8 @@ public:
 	: ParentScene{ ParentScene }, Rect{ Rect }, Art{ Image }
 	{}
 
-	virtual void HandleEvent(const SDL_Event& E) {}
+	bool HasMouseFocus() const;
+	virtual void HandleEvent(const SDL_Event& E);
 	void Tick(float DeltaTime) {}
 
 	void Render(SDL_Surface* Surface) {
