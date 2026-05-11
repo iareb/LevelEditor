@@ -59,7 +59,14 @@ namespace Config::Editor {
 	inline const SDL_Color ACTOR_MENU_BACKGROUND{ 15, 15, 15, 255 };
 	inline const int PADDING{ 10 };
 }
-#endif // WITH_EDITOR
+#endif
+
+namespace UserEvents {
+#ifdef WITH_EDITOR
+	inline Uint32 ACTOR_DRAG{ SDL_RegisterEvents(1) };
+#endif 
+
+}
 
 /**
  * @brief Checks for a pending SDL error and prints it if one is found.
