@@ -3,6 +3,8 @@
 #include <SDL3/SDL.h>
 #include "Image.h"
 
+enum class ActorLocation { Level, Menu };
+
 namespace LevelEditor {
 class Scene;
 class Actor {
@@ -12,12 +14,23 @@ public:
 	{}
 
 	bool HasMouseFocus() const;
-	virtual void HandleEvent(const SDL_Event& E);
+	virtual bool HandleEvent(const SDL_Event& E);
 	void Tick(float DeltaTime) {}
 
 	void Render(SDL_Surface* Surface) {
-		Art.Render(Surface, Rect);
+		if (GetIsVisible()) {
+			Art.Render(Surface, Rect);
+		}
 	}
+
+	ActorLocation GetLocation() const {
+		return Location;
+	}
+
+	void SetLocation(ActorLocation NewLocation) {
+		Location = NewLocation;
+	}
+
 
 	const SDL_Rect& GetRect() const {
 		return Rect;
@@ -44,10 +57,20 @@ public:
 		return std::make_unique<Actor>(*this);
 	}
 
+	bool GetIsVisible() const {
+		return isVisible;
+	}
+
+	void SetIsVisible(bool NewVisibility) {
+		isVisible = NewVisibility;
+	}
+
 protected:
+	ActorLocation Location{ ActorLocation::Menu };
 	Scene& ParentScene;
 	SDL_Rect Rect;
 	Image& Art;
 	SDL_Point DragOffset{ 0, 0 };
+	bool isVisible{ true };
 };
 }

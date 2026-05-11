@@ -47,7 +47,7 @@ bool Actor::HasMouseFocus() const {
 * to DragEvent.user.data1. This event, carrying the actor pointer, is then injected
 * into the event queue via SDL_PushEvent(&DragEvent)
 */
-void Actor::HandleEvent(const SDL_Event& E) {
+bool Actor::HandleEvent(const SDL_Event& E) {
 	if (E.type == SDL_EVENT_MOUSE_BUTTON_DOWN &&
 		E.button.button == SDL_BUTTON_LEFT &&
 		HasMouseFocus()
@@ -55,8 +55,14 @@ void Actor::HandleEvent(const SDL_Event& E) {
 		DragOffset.x = int(E.button.x) - Rect.x;
 		DragOffset.y = int(E.button.y) - Rect.y;
 
+		if (Location != ActorLocation::Menu) {
+			SetIsVisible(false);
+		}
+
 		SDL_Event DragEvent{ UserEvents::ACTOR_DRAG };
 		DragEvent.user.data1 = this;
 		SDL_PushEvent(&DragEvent);
+		return true;
 	}
+	return false;
 }

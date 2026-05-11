@@ -25,6 +25,7 @@ public:
 private:
     Scene& ParentScene;
     ActorPtrs Actors;
+    Actor* SelectedActor{ nullptr };
     SDL_Rect Rect{
         0, 0,
         Config::Editor::LEVEL_WIDTH,
