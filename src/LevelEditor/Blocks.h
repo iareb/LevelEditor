@@ -9,6 +9,16 @@ public:
 
     BlueBlock(Scene& ParentScene, SDL_Rect Rect);
 
+    static std::unique_ptr<Actor> Construct(
+        SDL_IOStream* Handle,
+        Scene& ParentScene
+    ) {
+        return std::make_unique<BlueBlock>(
+            ParentScene,
+            GeneratePositionRectangle(Handle, WIDTH, HEIGHT)
+        );
+    }
+
     Config::ActorType GetActorType() const override {
         return Config::ActorType::BlueBlock;
     }
@@ -24,6 +34,16 @@ public:
     static constexpr int HEIGHT{25};
 
     GreenBlock(Scene& ParentScene, SDL_Rect Rect);
+
+    static std::unique_ptr<Actor> Construct(
+        SDL_IOStream* Handle,
+        Scene& ParentScene
+    ) {
+        return std::make_unique<GreenBlock>(
+            ParentScene,
+            GeneratePositionRectangle(Handle, WIDTH, HEIGHT)
+        );
+    }
 
     Config::ActorType GetActorType() const override {
         return Config::ActorType::GreenBlock;

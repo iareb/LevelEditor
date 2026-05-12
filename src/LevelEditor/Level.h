@@ -13,7 +13,9 @@ using ActorPtrs = std::vector<ActorPtr>;
 class Level {
 public:
     Level(Scene& ParentScene)
-    : ParentScene{ParentScene} {}
+    : ParentScene{ParentScene} {
+        Load();
+    }
 
     void HandleEvent(const SDL_Event& E);
     void Tick(float DeltaTime);

@@ -1,5 +1,6 @@
 #include <ranges>
 #include <format>
+#include <functional>
 #include "LevelEditor/Level.h"
 #include "LevelEditor/Scene.h"
 
@@ -43,8 +44,72 @@ void Level::HandleEvent(const SDL_Event& Event) {
     }
 }
 
-void Level::Load() {
+namespace {
+    using namespace Config;
+    using ActorLoaderFunc = std::function<
+        std::unique_ptr<Actor>(SDL_IOStream*, Scene&)>;
+    
+    using enum ActorType;
+    std::unordered_map<ActorType, ActorLoaderFunc>ActorLoaders {
+        { BaseActor, {} },
+        { BlueBlock, BlueBlock::Construct },
+        { GreenBlock, GreenBlock::Construct },
+    };
+}
 
+void Level::Load() {
+    Actors.clear();
+    std::string Filename{
+        Config::BASE_PATH + std::format(
+            "Assets/Level{}.bin", LoadedLevel
+        )
+    };
+    SDL_IOStream* Handle{ SDL_IOFromFile(
+        Filename.c_str(), "rb"
+    )};
+    if (!Handle) {
+        CheckSDLError("Loading Level");
+        return;
+    }
+
+    Uint8 FileVersion{ 0 };
+    SDL_ReadU8(Handle, &FileVersion);
+    if (FileVersion != VERSION) {
+        // This file is from a different version of the software
+    }
+
+    Uint8 GridWidth{ 0 };
+    SDL_ReadU8(Handle, &GridWidth);
+    
+    Uint8 GridHeight{ 0 };
+    SDL_ReadU8(Handle, &GridHeight);
+
+    Uint32 ActorCount{ 0 };
+    SDL_ReadU32LE(Handle, &ActorCount);
+
+    std::cout << std::format("Loading a version "
+        "{} level ({}x{}) with {} actors\n",
+        FileVersion, GridWidth,
+        GridHeight, ActorCount
+    );
+
+    for (size_t i{ 0 }; i < ActorCount; ++i) {
+        Uint8 Type{ 0 };
+        SDL_ReadU8(Handle, &Type);
+
+        auto Loader{ ActorLoaders[static_cast<ActorType>(Type)]};
+        if (Loader) {
+            ActorPtr NewActor{ Loader(Handle, ParentScene) };
+            NewActor->SetLocation(ActorLocation::Level);
+            AddToLevel(std::move(NewActor));
+        }
+        else {
+            std::cout << "Error: no Loader for Actor "
+                "Type " << static_cast<int>(Type) << "\n";
+        }
+    }
+
+    SDL_CloseIO(Handle);
 }
 
 void Level::Save() {

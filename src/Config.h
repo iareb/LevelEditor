@@ -33,7 +33,7 @@ namespace Config {
 
 	/// Set of numeric identifiers for each actor, helps with serialization.
 	enum class ActorType : Uint8 {
-		Actor = 0,
+		BaseActor = 0,
 		BlueBlock = 1,
 		GreenBlock = 2,
 	};

@@ -32,12 +32,24 @@ public:
 		SDL_WriteU8(Handle, GridRow);
 		Uint8 GridColumn = Rect.x / HORIZONTAL_GRID_SNAP;
 		SDL_WriteU8(Handle, GridColumn);
+	}
 
+	static SDL_Rect GeneratePositionRectangle(
+		SDL_IOStream* Handle, int Width, int Height
+	) {
+		using namespace Config::Editor;
+		Uint8 GridRow{ 0 }, GridCol{ 0 };
+		SDL_ReadU8(Handle, &GridRow);
+		SDL_ReadU8(Handle, &GridCol);
 
+		SDL_Rect R{ 0, 0, Width, Height };
+		R.x = GridCol * HORIZONTAL_GRID_SNAP;
+		R.y = GridRow * VERTICAL_GRID_SNAP;
+		return R;
 	}
 
 	virtual Config::ActorType GetActorType() const {
-		return Config::ActorType::Actor;
+		return Config::ActorType::BaseActor;
 	}
 
 	ActorLocation GetLocation() const {
