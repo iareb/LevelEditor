@@ -66,12 +66,12 @@ void Level::Render(SDL_Surface* Surface) {
 }
 
 /**
- * @brief Function responsible for adding a new actor to the level's collection.
- * @param NewActor The actor to be added on the level.
- *
- * It uses Actors.push_back() to move the actor pointer to the Actors vector.
- * The ownership is transferred to the vector.
- */
+* @brief Function responsible for adding a new actor to the level's collection.
+* @param NewActor The actor to be added on the level.
+*
+* It uses Actors.push_back() to move the actor pointer to the Actors vector.
+* The ownership is transferred to the vector.
+*/
 void Level::AddToLevel(ActorPtr NewActor) {
     NewActor->SetLocation(ActorLocation::Level);
     Actors.push_back(std::move(NewActor));
@@ -97,23 +97,50 @@ void Level::HandleDrop(Actor* DragActor) {
 
     float MouseX, MouseY;
     SDL_GetMouseState(&MouseX, &MouseY);
-    auto [DragOffsetX, DragOffsetY] = DragActor->GetDragOffset();
+    auto [GridX, GridY] {
+        SnapToGridPosition(
+            int(MouseX), int(MouseY)
+        )
+    };
+    DeleteAtPosition(GridX, GridY, DragActor);
 
     using enum ActorLocation;
     if (DragActor->GetLocation() == Menu) {
         ActorPtr NewActor = DragActor->Clone();
-        NewActor->SetPosition(
-            int(MouseX) - DragOffsetX,
-            int(MouseY) - DragOffsetY
-        );
+        NewActor->SetPosition(GridX, GridY);
         SelectedActor = NewActor.get();
         AddToLevel(std::move(NewActor));
     }
     else {
-        DragActor->SetPosition(
-            int(MouseX) - DragOffsetX,
-            int(MouseY) - DragOffsetY
-        );
+        DragActor->SetPosition(GridX, GridY);
         SelectedActor = DragActor;
+    }
+}
+
+/**
+* @brief Function that performs snapping calculations and returns 
+* the coordinates of the top-left corner of the grid cell that contains it.
+* @param x,y The input coordinates.
+*
+* We try to find the largest multiple of the snap size (sx) 
+* that is less than or equal to the input coordinate (x).
+*/
+SDL_Point Level::SnapToGridPosition(int x, int y) {
+    using namespace Config::Editor;
+    int sx{ HORIZONTAL_GRID_SNAP };
+    int sy{ VERTICAL_GRID_SNAP };
+    return {
+        (x / sx) * sx,
+        (y / sy) * sy
+    };
+}
+
+void Level::DeleteAtPosition(int x, int y, const Actor* Unless) {
+    for (size_t i = 0; i < Actors.size(); ++i) {
+        auto [ax, ay] {Actors[i]->GetPosition()};
+        if (ax == x && ay == y && Actors[i].get() != Unless) {
+            Actors.erase(Actors.begin() + i);
+            break;
+        }
     }
 }

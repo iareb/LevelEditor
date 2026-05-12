@@ -45,8 +45,12 @@ namespace Config::Editor {
 	/**
 	 * @brief Configuration for the level area.
 	 */
-	inline const int LEVEL_WIDTH{ 650 };
-	inline const int LEVEL_HEIGHT{ 150 };
+	inline const int HORIZONTAL_GRID_SNAP{ 50 };
+	inline const int VERTICAL_GRID_SNAP{ 25 };
+	inline const Uint8 GRID_WIDTH{ 13 };
+	inline const Uint8 GRID_HEIGHT{ 6 };
+	inline const int LEVEL_WIDTH{ HORIZONTAL_GRID_SNAP * GRID_WIDTH };
+	inline const int LEVEL_HEIGHT{ VERTICAL_GRID_SNAP * GRID_HEIGHT };
 	inline constexpr SDL_Color LEVEL_BACKGROUND{ 50, 50, 50, 255 };
 
 	/**

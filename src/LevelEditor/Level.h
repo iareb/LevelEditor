@@ -21,6 +21,8 @@ public:
     bool HasMouseFocus() const;
     void AddToLevel(ActorPtr NewActor);
     void HandleDrop(Actor* DragActor);
+    SDL_Point SnapToGridPosition(int x, int y);
+    void DeleteAtPosition(int x, int y, const Actor* Unless);
 
 private:
     Scene& ParentScene;

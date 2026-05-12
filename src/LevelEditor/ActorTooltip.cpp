@@ -34,20 +34,29 @@ void ActorTooltip::PositionWindow() {
   float x, y;
   SDL_GetMouseState(&x, &y);
 
-  auto [DragOffsetX, DragOffsetY] {
-    DragActor->GetDragOffset()
-  };
-
-  SDL_SetWindowPosition(
-    SDLWindow,
-    int(x) - DragOffsetX,
-    int(y) - DragOffsetY
-  );
-
   if (ParentScene.GetLevel().HasMouseFocus()) {
     SDL_SetWindowOpacity(SDLWindow, 1.0f);
     SDL_SetCursor(SDL_GetDefaultCursor());
-  } else {
+
+    auto [GridX, GridY] {
+        ParentScene.GetLevel().SnapToGridPosition(
+            int(x), int(y)
+        )
+    };
+
+    SDL_SetWindowPosition(SDLWindow, GridX, GridY);
+  } 
+  else {
+     auto [DragOffsetX, DragOffsetY] {
+         DragActor->GetDragOffset()
+     };
+
+     SDL_SetWindowPosition(
+         SDLWindow,
+         int(x) - DragOffsetX,
+         int(y) - DragOffsetY
+     );
+
     SDL_SetWindowOpacity(SDLWindow, 0.5f);
     SDL_SetCursor(DenyCursor);
   }
