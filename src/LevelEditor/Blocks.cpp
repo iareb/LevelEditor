@@ -10,3 +10,11 @@ BlueBlock::BlueBlock(Scene& ParentScene, SDL_Rect Rect)
 		ParentScene.GetAssets().BlueBlock
 	}
 {}
+
+GreenBlock::GreenBlock(Scene &ParentScene, SDL_Rect Rect)
+	: Actor{
+		ParentScene,
+		SDL_Rect{Rect.x, Rect.y, WIDTH, HEIGHT},
+		ParentScene.GetAssets().GreenBlock
+	}
+{}

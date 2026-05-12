@@ -24,6 +24,10 @@ public:
     SDL_Point SnapToGridPosition(int x, int y);
     void DeleteAtPosition(int x, int y, const Actor* Unless);
 
+    void Load();
+    void Save();
+    void SaveAndPlay();
+
 private:
     Scene& ParentScene;
     ActorPtrs Actors;
@@ -33,5 +37,6 @@ private:
         Config::Editor::LEVEL_WIDTH,
         Config::Editor::LEVEL_HEIGHT
     };
+    int LoadedLevel{1};
 };
 }

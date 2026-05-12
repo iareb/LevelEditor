@@ -23,6 +23,23 @@ public:
 		}
 	}
 
+	virtual void Serialize(SDL_IOStream* Handle) const {
+		using namespace Config::Editor;
+		Uint8 ActorType{static_cast<Uint8>(GetActorType())};
+		SDL_WriteU8(Handle, ActorType);
+
+		Uint8 GridRow = Rect.y / VERTICAL_GRID_SNAP;
+		SDL_WriteU8(Handle, GridRow);
+		Uint8 GridColumn = Rect.x / HORIZONTAL_GRID_SNAP;
+		SDL_WriteU8(Handle, GridColumn);
+
+
+	}
+
+	virtual Config::ActorType GetActorType() const {
+		return Config::ActorType::Actor;
+	}
+
 	ActorLocation GetLocation() const {
 		return Location;
 	}

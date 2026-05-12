@@ -15,6 +15,15 @@ void Button::HandleEvent(const SDL_Event& E) {
 			State = Normal;
 		}
 	}
+	else if (E.type == SDL_EVENT_MOUSE_BUTTON_DOWN &&
+		E.button.button == SDL_BUTTON_LEFT &&
+		ParentScene.HasMouseFocus()
+	) {
+		SDL_Point Pos{ int(E.button.x), int(E.button.y) };
+		if (SDL_PointInRect(&Pos, &Rect)) {
+			HandleLeftClick();
+		}
+	}
 }
 
 void Button::Render(SDL_Surface* Surface) {

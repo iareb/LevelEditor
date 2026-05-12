@@ -12,7 +12,6 @@
  * settings used throughout the SDL rendering pipeline.
  */
 namespace Config {
-
 	/**
 	 * @brief Color palette for the different states of a button.
 	 */
@@ -31,6 +30,13 @@ namespace Config {
 
 	/// Default text color (opaque white).
 	inline constexpr SDL_Color FONT_COLOR{ 255, 255, 255, 255 };
+
+	/// Set of numeric identifiers for each actor, helps with serialization.
+	enum class ActorType : Uint8 {
+		Actor = 0,
+		BlueBlock = 1,
+		GreenBlock = 2,
+	};
 }
 
 #ifdef WITH_EDITOR
@@ -42,6 +48,8 @@ namespace Config {
  * configuration so they are stripped out in non-editor builds.
  */
 namespace Config::Editor {
+	/// The Level Editor version.
+	inline const Uint8 VERSION{ 1 };
 	/**
 	 * @brief Configuration for the level area.
 	 */
@@ -74,8 +82,12 @@ namespace Config::Editor {
 namespace UserEvents {
 #ifdef WITH_EDITOR
 	inline Uint32 ACTOR_DRAG{ SDL_RegisterEvents(1) };
+	inline Uint32 LOAD_LEVEL{ SDL_RegisterEvents(1) };
+	inline Uint32 SAVE_LEVEL{ SDL_RegisterEvents(1) };
+	inline Uint32 SAVE_AND_PLAY_LEVEL{ SDL_RegisterEvents(1) };
+	inline Uint32 LEVEL_EDIT{ SDL_RegisterEvents(1) };
 #endif 
-
+	inline Uint32 LAUNCH_LEVEL{ SDL_RegisterEvents(1) };
 }
 
 /**

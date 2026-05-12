@@ -1,4 +1,5 @@
 #include <ranges>
+#include <format>
 #include "LevelEditor/Level.h"
 #include "LevelEditor/Scene.h"
 
@@ -6,6 +7,8 @@ using namespace LevelEditor;
 
 void Level::HandleEvent(const SDL_Event& Event) {
     using namespace std::views;
+    using namespace UserEvents;
+
     for (ActorPtr& A : reverse(Actors)) {
         if (A->HandleEvent(Event)) {
             break;
@@ -26,9 +29,58 @@ void Level::HandleEvent(const SDL_Event& Event) {
                 break;
             }
         }
-
         SelectedActor = nullptr;
     }
+    else if (Event.type == LOAD_LEVEL) {
+        LoadedLevel = Event.user.code;
+        Load();
+    }
+    else if (Event.type == SAVE_LEVEL) {
+        Save();
+    }
+    else if (Event.type == SAVE_AND_PLAY_LEVEL) {
+        SaveAndPlay();
+    }
+}
+
+void Level::Load() {
+
+}
+
+void Level::Save() {
+    std::string Filename{
+        Config::BASE_PATH + std::format(
+            "Assets/Level{}.bin", LoadedLevel
+        )
+    };
+    SDL_IOStream* Handle{
+        SDL_IOFromFile(Filename.c_str(), "wb")
+    };
+    CheckSDLError("Saving Level to existing file");
+    if (!Handle) {
+        Handle = SDL_IOFromFile(Filename.c_str(), "w+b");
+        CheckSDLError("Saving level to new file");
+    }
+
+    using namespace Config::Editor;
+    SDL_WriteU8(Handle, VERSION);
+    SDL_WriteU8(Handle, GRID_WIDTH);
+    SDL_WriteU8(Handle, GRID_HEIGHT);
+
+    SDL_WriteU32LE(Handle, Uint32(Actors.size()));
+    for (const ActorPtr& A : Actors) {
+        A->Serialize(Handle);
+    }
+
+    SDL_CloseIO(Handle);
+}
+
+void Level::SaveAndPlay() {
+    Save();
+    SDL_Event E{};
+    E.type = UserEvents::LAUNCH_LEVEL;
+    E.user.code = LoadedLevel;
+    SDL_PushEvent(&E);
 }
 
 void Level::Tick(float DeltaTime) {
@@ -115,6 +167,9 @@ void Level::HandleDrop(Actor* DragActor) {
         DragActor->SetPosition(GridX, GridY);
         SelectedActor = DragActor;
     }
+    SDL_Event E{};
+    E.type = UserEvents::LEVEL_EDIT;
+    SDL_PushEvent(&E);
 }
 
 /**

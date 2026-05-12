@@ -27,6 +27,16 @@ public:
                 }
             )
         );
+        Actors.emplace_back(
+            std::make_unique<GreenBlock>(
+                GetScene(),
+                SDL_Rect{
+                    ACTOR_MENU_POSITION_X + PADDING,
+                    BlueBlock::HEIGHT + PADDING * 2,
+                    0, 0
+                }
+            )
+        );
     }
 
     void HandleEvent(const SDL_Event& E) {
